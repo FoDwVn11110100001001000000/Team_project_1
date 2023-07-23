@@ -1,8 +1,43 @@
 from collections import UserDict
 from datetime import datetime
+from itertools import islice
 from email_validator import validate_email
 import phonenumbers
 import pickle
+from abc import ABC, abstractmethod
+
+class TerminalOutput(ABC):
+    @abstractmethod
+    def days_to_birthday(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def add_email(self, email):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def add_phone(self, phone):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def add_birthday(self, birthday):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def show_phones(self):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def del_phone(self, num=1):
+        raise NotImplementedError()
+    
+    @abstractmethod
+    def edit_phone(self, phone_new, num=1):
+        raise NotImplementedError()
+
+    @abstractmethod
+    def add_home_address(self, home):
+        raise NotImplementedError()
 
 
 class Field:
@@ -88,7 +123,7 @@ class Home(Field):
         return self.value
 
 
-class Record:
+class Record(TerminalOutput):
     def __init__(
         self,
         name: Name,
@@ -176,24 +211,18 @@ class Record:
 
 
 class AddressBook(UserDict):
-    def __init__(self, filename):
-        super().__init__()
-        self.filename = filename
+    def load_from_file(self, filename):
+        with open(filename, "rb") as file:
+            self.data = pickle.load(file)
 
-
-    def load_from_file(self):
-        with open(self.filename, "rb") as file:
-            book = pickle.load(file)
-        return book
-
-    def save_to_file(self):
-        with open(self.filename, "wb") as file:
-            pickle.dump(self, file)
+    def save_to_file(self, filename):
+        with open(filename, "wb") as file:
+            pickle.dump(self.data, file)
     
     def search(self, sample: str) -> list:
         searching = []
         for contact in self.data.values():
-            if sample.lower() in str(contact).lower():
+            if sample in str(contact):
                 searching.append(contact)
         return searching
 

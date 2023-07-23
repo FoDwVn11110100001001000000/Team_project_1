@@ -1,11 +1,11 @@
-from .logo import LOGO
+import os
 
-from .addressbook import addressbook_app
-from .file_sorter import sorter_app
-from .openai_gpt import gpt_app
-from .notebook import notebook_app
-from .utilities import completer_input, kb_interrupt_error
-
+from logo import LOGO
+from addressbook import addressbook_app
+from file_sorter import sorter_app
+from openai_gpt import gpt_app
+from notebook import notebook_app
+from utilities import completer_input, kb_interrupt_error
 
 def exit_bot():
     print('Чекаю твого найшвидшого повернення!')

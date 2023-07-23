@@ -1,1 +1,1 @@
-from ..file_sorter.sorter import main as sorter_app
+from file_sorter.sorter import main as sorter_app

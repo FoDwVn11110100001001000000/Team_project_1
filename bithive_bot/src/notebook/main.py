@@ -2,11 +2,10 @@ from colorama import init, Fore
 import pickle
 from pathlib import Path
 
-from ..utilities import completer_input
-from ..data_storage import DATA_DIRECTORY
+from utilities import completer_input
 
-from ..notebook.classes import NoteBook
-from ..notebook.handler import * 
+from notebook.classes import NoteBook
+from notebook.handler import * 
 
 init()
 
@@ -33,23 +32,20 @@ def close(path, note_book):
     with open(path, 'wb') as file:
         pickle.dump(note_book, file)
 
-def greeting():
-    print()
-    print('{:<116}'.format(Fore.BLUE + f'{" "*5}Вас вітає додаток НОТАТКИ 📖'))
-    print('{:<116}'.format(Fore.YELLOW + f'{" "*5}Тут ви можете зберігати свої нотатки та керувати ними' + Fore.WHITE))
-    print()
-
-first_launch = True
-
+first_start = True
 @input_error_handler
 def note_book():
+    
     try:
-        global first_launch
-        if first_launch:
-            greeting()
-            first_launch = False
+        global first_start
+        if first_start:
+            print()
+            print('{:<116}'.format(Fore.BLUE + f'{" "*5}Вас вітає додаток НОТАТКИ 📖'))
+            print('{:<116}'.format(Fore.YELLOW + f'{" "*5}Тут ви можете зберігати свої нотатки та керувати ними' + Fore.WHITE))
+            print()
+            first_start = False
 
-        path = DATA_DIRECTORY / 'notebook_data.bin'
+        path = Path(__file__).parent / 'note_book.txt'
         print(HELP_TABLE)
         with open(path, 'ab+') as file:
             if not file.read(): #empty file (first start)
@@ -66,7 +62,7 @@ def note_book():
 
             if command == 'close':
                 close(path, note_book)
-                first_launch = True
+                first_start = True
                 break
 
             result = COMMAND_DICT[command](note_book, value)
@@ -75,7 +71,7 @@ def note_book():
 
             if command == 'close':
                 close(path, note_book)
-                first_launch = True
+                first_start = True
                 break
             
             if result:

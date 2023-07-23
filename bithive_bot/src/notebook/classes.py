@@ -1,4 +1,36 @@
 from datetime import datetime
+from abc import ABC, abstractmethod
+
+class TerminalOutput(ABC):
+
+    @abstractmethod
+    def add_note(self, name, value):
+        pass
+
+    @abstractmethod
+    def add(self, note):
+        pass
+
+    @abstractmethod
+    def show_all(self):
+        pass
+
+    @abstractmethod
+    def search(self, value):
+        pass
+    
+    @abstractmethod
+    def delete(self, note):
+        pass
+
+    @abstractmethod
+    def change(self, new_value, note):
+        pass
+    
+    @abstractmethod
+    def change_tag(self, new_tags, note):
+        pass
+
 
 class Note():
 
@@ -25,7 +57,7 @@ class Note():
 
     def __eq__(self, obj: object) -> bool:
         return self.createde_time == obj.createde_time
-    
+
     def __ge__(self, obj):
         return self.createde_time >= obj.createde_time
     
@@ -39,7 +71,7 @@ class Note():
         return self.createde_time > obj.createde_time
 
 
-class NoteBook():
+class NoteBook(TerminalOutput):
 
     def __init__(self):
         self.data = []
